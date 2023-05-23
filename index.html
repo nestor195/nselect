@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>nselect</title>
+</head>
+<body>
+    <script>
+        window.addEventListener("load", function(){
+            // busca los elementos de clase nselect
+            const nselect_elements = document.getElementsByClassName("nselect");
+            // recorre los elementos
+            for (let i = 0; i < nselect_elements.length; i++) {
+                const newNode = document.createElement("input");
+
+                // obtengo la posicion relativa de nselect_elements[i]
+                const x_pos = nselect_elements[i].offsetLeft;
+                const y_pos = nselect_elements[i].offsetTop;
+                const elementWidth = nselect_elements[i].offsetWidth;
+                const elementHeight = nselect_elements[i].offsetHeight;
+
+                // OCULTA EL SELECT
+                nselect_elements[i].style.display = "none";
+                // INSERTA EL INPUT
+                const insertedNode = nselect_elements[i].parentNode.insertBefore(newNode, nselect_elements[i]);
+                insertedNode.style.width = elementWidth + "px";
+                
+                
+                insertedNode.addEventListener("focus", function(){
+                    desplegable.style.display = "block";
+                });
+                insertedNode.addEventListener("blur", function(){
+                    desplegable.style.display = "none";
+                });
+                
+
+                // busca los option del nselect
+                const nselect_options = nselect_elements[i].getElementsByTagName("option");
+                // recorre los option
+                const desplegable = document.createElement("div");
+                desplegable.style.display = "none";
+                desplegable.style.position = "absolute";
+                desplegable.style.top = y_pos + elementHeight +"px";
+                desplegable.style.left = x_pos + "px";
+                desplegable.style.border = "1px solid light-gray";
+                desplegable.style.width = elementWidth + "px";
+                desplegable.style.borderRadius = "5px";
+                desplegable.style.padding= '0 3px 0';
+                desplegable.style.fontFamily= "sans-serif";
+                desplegable.style.fontSize= ".9em";
+                // sombra
+                desplegable.style.boxShadow = "0 0 8px gray";
+
+
+                
+                const opciones = [];
+                for (let j = 0; j < nselect_options.length; j++) {
+                    //nselect_options[j].style.display = "none";
+                    const desplegableOption = document.createElement("div");
+                    
+                    desplegableOption.addEventListener("mouseover", function(){
+                        const elementos = desplegable.getElementsByTagName("div");
+                        for(let k = 0; k < elementos.length; k++){
+                            elementos[k].style.backgroundColor = "#FFFFFF";
+                            elementos[k].style.color = "black";
+                        }
+                        desplegableOption.style.backgroundColor = "#3390FF";
+                        desplegableOption.style.color = "white";
+                    });
+                    desplegableOption.addEventListener("click", function(){
+                        console.log(insertedNode);
+                    })
+                    desplegableOption.innerHTML = nselect_options[j].innerHTML;
+                    desplegable.appendChild(desplegableOption);
+                    document.body.appendChild(desplegable);
+
+                }
+
+            }
+        });
+    </script>
+
+
+    <select style="width:200px" name="" id="" class="nselect" data-options="iconCls:'icon-search'">
+        <option value="1">auto</option>
+        <option value="2">casa</option>
+        <option value="3">piano</option>
+        <option value="4">moto</option>
+    </select>
+    
+    <select name="" id="" class="nselect" data-options="iconCls:'icon-search'">
+        <option value="1">puerta</option>
+        <option value="2">moto</option>
+        <option value="3">arbol</option>
+    </select>
+
+    <select name="" id="" data-options="iconCls:'icon-search'">
+        <option value="1">puerta</option>
+        <option value="2">moto</option>
+        <option value="3">arbol</option>
+    </select>
+</body>
+</html>
